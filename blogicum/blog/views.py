@@ -6,17 +6,21 @@ from .models import Category, Post
 POSTS_PER_PAGE = 5
 
 
-def index(request):
-    """Главная страница: пять последних опубликованных постов."""
-    post_list = (
+def get_published_posts():
+    return (
         Post.objects.select_related('author', 'location', 'category')
         .filter(
             is_published=True,
             pub_date__lte=timezone.now(),
             category__is_published=True,
         )
-        .order_by('-pub_date')[:POSTS_PER_PAGE]
+        .order_by('-pub_date')
     )
+
+
+def index(request):
+    """Главная страница с последними публикациями."""
+    post_list = get_published_posts()[:POSTS_PER_PAGE]
     context = {
         'post_list': post_list,
     }
@@ -24,35 +28,23 @@ def index(request):
 
 
 def post_detail(request, id: int):
-    """Страница отдельной публикации по id."""
+    """Детальная страница публикации по id."""
     post = get_object_or_404(
-        Post.objects.select_related('author', 'location', 'category'),
+        get_published_posts(),
         pk=id,
-        is_published=True,
-        pub_date__lte=timezone.now(),
-        category__is_published=True,
     )
     return render(request, 'blog/detail.html', {'post': post})
 
 
 def category_posts(request, category_slug: str):
-    """Страница категории: список публикаций в данной категории."""
-    # 404, если категория не опубликована или не существует
+    """Список публикаций в выбранной категории."""
     category = get_object_or_404(
         Category,
         slug=category_slug,
         is_published=True,
     )
 
-    post_list = (
-        Post.objects.select_related('author', 'location', 'category')
-        .filter(
-            category=category,
-            is_published=True,
-            pub_date__lte=timezone.now(),
-        )
-        .order_by('-pub_date')
-    )
+    post_list = get_published_posts().filter(category=category)
 
     context = {
         'category': category,

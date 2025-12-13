@@ -4,7 +4,22 @@ from django.db import models
 User = get_user_model()
 
 
-class Category(models.Model):
+class PublishedModel(models.Model):
+    is_published = models.BooleanField(
+        'Опубликовано',
+        default=True,
+        help_text='Снимите галочку, чтобы скрыть публикацию.',
+    )
+    created_at = models.DateTimeField(
+        'Добавлено',
+        auto_now_add=True,
+    )
+
+    class Meta:
+        abstract = True
+
+
+class Category(PublishedModel):
     title = models.CharField(
         'Заголовок',
         max_length=256,
@@ -20,15 +35,6 @@ class Category(models.Model):
             'цифры, дефис и подчёркивание.'
         ),
     )
-    is_published = models.BooleanField(
-        'Опубликовано',
-        default=True,
-        help_text='Снимите галочку, чтобы скрыть публикацию.',
-    )
-    created_at = models.DateTimeField(
-        'Добавлено',
-        auto_now_add=True,
-    )
 
     class Meta:
         verbose_name = 'категория'
@@ -39,19 +45,10 @@ class Category(models.Model):
         return self.title
 
 
-class Location(models.Model):
+class Location(PublishedModel):
     name = models.CharField(
         'Название места',
         max_length=256,
-    )
-    is_published = models.BooleanField(
-        'Опубликовано',
-        default=True,
-        help_text='Снимите галочку, чтобы скрыть публикацию.',
-    )
-    created_at = models.DateTimeField(
-        'Добавлено',
-        auto_now_add=True,
     )
 
     class Meta:
@@ -63,7 +60,7 @@ class Location(models.Model):
         return self.name
 
 
-class Post(models.Model):
+class Post(PublishedModel):
     title = models.CharField(
         'Заголовок',
         max_length=256,
@@ -98,15 +95,6 @@ class Post(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         related_name='posts',
-    )
-    is_published = models.BooleanField(
-        'Опубликовано',
-        default=True,
-        help_text='Снимите галочку, чтобы скрыть публикацию.',
-    )
-    created_at = models.DateTimeField(
-        'Добавлено',
-        auto_now_add=True,
     )
 
     class Meta:

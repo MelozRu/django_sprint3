@@ -176,17 +176,3 @@ class _TestModelAttrs:
                 f'проверьте значение параметра `{display_name}` '
                 'на соответствие заданию.'
             )
-from django.urls import reverse, NoReverseMatch
-
-
-def try_get_url(client, url_name, *args, **kwargs):
-    """Вспомогательная функция для тестов HTML/шаблонов.
-
-    Пытается построить URL по имени, если не удалось — возвращает None.
-    Если удалось — делает GET-запрос и возвращает ответ.
-    """
-    try:
-        url = reverse(url_name, args=args, kwargs=kwargs)
-    except NoReverseMatch:
-        return None
-    return client.get(url)
