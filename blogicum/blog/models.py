@@ -5,6 +5,8 @@ User = get_user_model()
 
 
 class PublishedModel(models.Model):
+    """Базовая модель с флагом публикации и датой создания."""
+
     is_published = models.BooleanField(
         'Опубликовано',
         default=True,
@@ -20,6 +22,8 @@ class PublishedModel(models.Model):
 
 
 class Category(PublishedModel):
+    """Тематическая категория."""
+
     title = models.CharField(
         'Заголовок',
         max_length=256,
@@ -46,6 +50,8 @@ class Category(PublishedModel):
 
 
 class Location(PublishedModel):
+    """Географическая метка публикации."""
+
     name = models.CharField(
         'Название места',
         max_length=256,
@@ -61,6 +67,8 @@ class Location(PublishedModel):
 
 
 class Post(PublishedModel):
+    """Публикация пользователя."""
+
     title = models.CharField(
         'Заголовок',
         max_length=256,
