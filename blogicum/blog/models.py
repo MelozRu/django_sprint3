@@ -41,11 +41,14 @@ class Category(PublishedModel):
     )
 
     class Meta:
+        """Мета-настройки модели категории."""
+
         verbose_name = 'категория'
         verbose_name_plural = 'Категории'
         ordering = ('title',)
 
     def __str__(self) -> str:
+        """Строковое представление категории."""
         return self.title
 
 
@@ -58,11 +61,14 @@ class Location(PublishedModel):
     )
 
     class Meta:
+        """Мета-настройки модели местоположения."""
+
         verbose_name = 'местоположение'
         verbose_name_plural = 'Местоположения'
         ordering = ('name',)
 
     def __str__(self) -> str:
+        """Строковое представление местоположения."""
         return self.name
 
 
@@ -106,9 +112,12 @@ class Post(PublishedModel):
     )
 
     class Meta:
+        """Мета-настройки модели публикации."""
+
         verbose_name = 'публикация'
         verbose_name_plural = 'Публикации'
         ordering = ('-pub_date',)
 
     def __str__(self) -> str:
+        """Строковое представление публикации."""
         return self.title
